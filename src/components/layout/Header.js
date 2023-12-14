@@ -4,8 +4,13 @@ import Link from 'next/link'
 
 export default function Header () {
   const session = useSession()
-  console.log(session)
   const status = session.status
+
+  const userData = session.data?.user
+  let userName = userData?.name || userData?.email
+  if(userName && userName.includes(' ')) {
+    userName=userName.split(' ')[0]
+  }
   
   return (
     <header className='flex items-center justify-between'>
@@ -23,11 +28,20 @@ export default function Header () {
 
       <nav className='flex items-center gap-4 text-gray-500'>
         {status === 'authenticated' && (
-          <button 
-            className='bg-primary text-white rounded-full px-8 py-2'
-            onClick={()=>signOut()}
-            >logout
-          </button>
+          <>
+            <Link 
+              href={'/profile'}
+              className='whitespace-nowrap'>
+                Hello, {userName}
+            </Link>
+
+            <button 
+              className='bg-primary text-white rounded-full px-8 py-2'
+              onClick={()=>signOut()}
+              >logout
+            </button>
+          
+          </>
         )}
         
         {status ==='unauthenticated' && (
