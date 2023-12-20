@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useEffect, useState } from "react"
 import Link from 'next/link'
 import UserTabs from '@/components/layout/UserTabs'
+import EditableImage from '@/components/layout/EditableImage'
 
 import toast from 'react-hot-toast';
 
@@ -71,32 +72,6 @@ export default function ProfilePage () {
     })
   }
 
-  async function handleFileChange (e) {
-    const files = e.target.files
-    if(files?.length===1){
-      const data = new FormData
-      data.set('file', files[0])
-      
-      const uploadPromise = fetch('/api/upload', {
-        method: 'POST',
-        body: data,
-      }).then(response=>{
-        if(response.ok) {
-          return response.json().then(link =>{
-            setImage(link)
-          })
-        }
-        throw new Error ('Something went wrong!')
-      })
-
-      await toast.promise(uploadPromise, {
-        loading: 'Uploading...',
-        sucess: 'Upload complete',
-        error: 'Upload error',
-      })
-    }
-  }
-
   if(status === 'loading' || !profileFetched) {
     return 'Loading...'
   }
@@ -115,13 +90,7 @@ export default function ProfilePage () {
         <div className="flex gap-4">
           <div>     
             <div className=" p-2 rounded-lg relative max-w-[120px]">
-              {image && (<Image className="rounded-lg w-full h-full mb-1" src={image} width={250} height={250} alt="avatar" />)}
-              
-              <label>
-                <input className="hidden" type="file" onChange={handleFileChange} />
-                <span className="border border-gray-300 rounded-lg p-2 block text-center cursor-pointer">Edit</span>
-              </label>
-              
+              <EditableImage link={image} setLink={setImage}  />
             </div>
           </div>
 
