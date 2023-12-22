@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import EditableImage from '@/components/layout/EditableImage'
 import MenuItemPriceProps from '@/components/layout/MenuItemPriceProps'
 
@@ -11,17 +11,29 @@ export default function MenuItemForm ({onSubmit, menuItem}) {
   const [basePrice, setBasePrice] = useState(menuItem?.basePrice || '')
   const [sizes, setSizes] = useState(menuItem?.sizes || [])
   const [extraIngredientPrices, setExtraIngredientPrices] = useState(menuItem?.extraIngredientPrices || [])
+  const [category, setcategory] = useState(menuItem?.category || '')
+  const [categories, setCategories] = useState([])
   
+  useEffect(()=>{
+    fetch('/api/categories')
+    .then(res=>{
+      res.json()
+      .then(categories=>{
+        setCategories(categories)
+      })
+    })
+  },[])
   
 
   return (
     <form 
-    onSubmit={e=>onSubmit(e,{image, name, description,basePrice, sizes, extraIngredientPrices})} 
+    onSubmit={e=>onSubmit(e,{image, name, description,basePrice, sizes, extraIngredientPrices, category})} 
     className='mt-8 max-w-md mx-auto'>
         <div className='grid gap-4 items-start' style={{gridTemplateColumns: '0.3fr 0.7fr'}}>
           <div>
             <EditableImage link={image} setLink={setImage} />
           </div>
+
           <div className='grow'>
             <label>Item name</label>
             <input 
@@ -29,12 +41,29 @@ export default function MenuItemForm ({onSubmit, menuItem}) {
               value={name}
               onChange={e=>setName(e.target.value)}
               />
+
             <label>Description</label>
             <input 
               type='text' 
               value={description}
               onChange={e=>setDescription(e.target.value)}
               />
+            
+            <label>Category</label>
+              <select 
+                value={category} 
+                onChange={e=>setcategory(e.target.value)}
+                >
+                {categories?.length>0 && categories.map(c=>(
+                  <option 
+                    key={c._id} 
+                    value={c._id}
+                    >
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            
             <label>Base price</label>
             <input 
               type='text' 

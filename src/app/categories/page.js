@@ -3,6 +3,7 @@ import UserTabs from "@/components/layout/UserTabs";
 import {useProfile} from '@/components/useProfile'
 import { useEffect, useState } from "react";
 import toast from 'react-hot-toast';
+import DeleteButton from "@/components/DeleteButton";
 
 
 export default function CategoriesPage () {
@@ -138,11 +139,11 @@ export default function CategoriesPage () {
                   setEditedCategory(c)
                   setCategoryName(c.name)
                   }}
-                >Edit</button>
-              <button 
-                type="button"
-                onClick={()=>handleDeleteClick(c._id)}
-                >Delete</button>
+                >Edit
+              </button>
+              <DeleteButton 
+                label='Delete' 
+                onDelete={()=>handleDeleteClick(c._id)} />
 
               </div>
           </div>

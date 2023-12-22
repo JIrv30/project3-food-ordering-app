@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Left from '@/components/icons/Left'
 import {redirect, useParams} from "next/navigation";
 import MenuItemForm from '@/components/layout/MenuItemForm'
+import DeleteButton from '@/components/DeleteButton'
 
 export default function EditMenuItemPage () {
   const {loading, data} = useProfile()
@@ -92,10 +93,9 @@ export default function EditMenuItemPage () {
       
       <div className='max-w-md mx-auto mt-4'>
         <div className=' max-w-xs ml-auto pl-4'>
-          <button
-            onClick={handleDeleteClick}>
-            Delete this menu item
-          </button>
+          <DeleteButton
+            label='Delete this menu item'
+            onDelete={handleDeleteClick} />
         </div>
       </div>
     </section>
